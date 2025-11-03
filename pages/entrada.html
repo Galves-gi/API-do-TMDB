@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moovix</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Cardo&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at center, #0d0d0d 0%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 5rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #fff;
+      position: relative;
+      display: inline-block;
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+
+    /* Efeito de brilho pulsante */
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 5px #ff007f, 0 0 15px #ff007f, 0 0 30px #ff007f;
+        color: #fff;
+      }
+      100% {
+        text-shadow: 0 0 10px #05f2f2, 0 0 25px #05f2f2, 0 0 45px #05f2f2;
+        color: #bafcfc;
+      }
+    }
+
+    /* Animação de entrada */
+    .logo span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: rise 0.8s forwards;
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cria um efeito de atraso nas letras */
+    .logo span:nth-child(1) { animation-delay: 0.1s; }
+    .logo span:nth-child(2) { animation-delay: 0.2s; }
+    .logo span:nth-child(3) { animation-delay: 0.3s; }
+    .logo span:nth-child(4) { animation-delay: 0.4s; }
+    .logo span:nth-child(5) { animation-delay: 0.5s; }
+    .logo span:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+</head>
+<body>
+  <h1 class="logo">
+    <span>M</span><span>O</span><span>O</span><span>V</span><span>I</span><span>X</span>
+  </h1>
+
+  <script>
+    // Pequeno detalhe dinâmico — mudar gradualmente o fundo
+    let hue = 0;
+    setInterval(() => {
+      hue += 1;
+      document.body.style.background = `radial-gradient(circle at center, hsl(${hue}, 60%, 5%) 0%, #000 100%)`;
+    }, 100);
+  </script>
+</body>
+</html>

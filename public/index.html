@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filme TMDB</title>
+</head>
+<body>
+
+  <h1 class="titulo">Título do Filme</h1>
+  <p class="descricao">Descrição do filme</p>
+
+  <script>
+    async function carregarFilme() {
+      try {
+        const resposta = await fetch("/filme/11");
+        const dados = await resposta.json();
+        
+        document.querySelector(".titulo").textContent = dados.title;
+        document.querySelector(".descricao").textContent = dados.overview;
+      } catch (erro) {
+        console.log("Erro ao carregar filme:", erro);
+      }
+    }
+
+    carregarFilme();
+  </script>
+
+</body>
+</html>

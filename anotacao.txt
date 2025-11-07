@@ -1,0 +1,220 @@
+AXIOS
+- o que é?
+
+
+- oq consegue fazer?
+
+- onde usar?
+
+
+- como usar?
+
+
+EXPRESS
+- o que é?
+
+
+- O que faz?
+
+
+- Como usar?
+
+
+DOTENV
+- O QUE É?
+
+
+--------------------------------------------------
+MIDDLEWARE
+
+Middleware é uma função que fica entre a requisição e a resposta.
+
+Ele intercepta a requisição antes que ela chegue na rota final, podendo:
+
+    ✔ Inspecionar req
+    ✔ Alterar req e res
+    ✔ Bloquear
+    ✔ Registrar
+    ✔ Fazer parsing
+    ✔ Autenticação
+    ✔ Autorizar
+    ✔ Validar
+    ✔ Tratar erros
+
+Situação para usar?
+    várias rota
+    Segurança
+    Logs	
+    Parsing	
+    Validar token	
+    Capturar erros
+
+
+
+req → dados do cliente
+
+res → resposta para o cliente
+
+next() → chama o próximo middleware/rota
+
+Se não chamar next(), a cadeia para ali.
+
+    function meuMiddleware(req, res, next) {
+    console.log("Passou pelo middleware");
+    next(); // continua
+    }
+
+
+MIDDLEWARE DE ERROS
+
+
+Por quê usar req, res e next:
+    - Mesmo que você não use req e res dentro dele, eles precisam estar presentes para o Express entender que é um middleware que recebe requisição e encaminha adiante.
+        ✔️ req → dados da requisição
+        ✔️ res → resposta
+        ✔️ next(error) → encaminha para middleware de erro
+
+- Certifique-se de colocar o middleware após as rotas. Se colocar antes, ele nunca será acionado.
+    app.use("/api", router);
+
+    // ⬇ precisa vir depois das rotas
+    app.use(errorHandler);
+
+
+--------------------------------------------------
+
+try....catch
+catch:
+
+    console.log(error.response?.data);
+
+    ? é o optional chaining no JavaScript:
+        -> “Acesse a propriedade somente se ela existir.”
+
+
+--------------------------------------------------
+
+HEADERS
+
+Authorization: Bearer SEU_TOKEN_AQUI
+
+Bearer : 
+    A palavra “bearer” vem do inglês e quer dizer portador.
+    Então Bearer Token significa:
+
+    Quem estiver portando este token tem permissão para acessar o recurso.
+
+
+--------------------------------------------------
+
+PADRÃO NBC - MODULE
+
+
+--------------------------------------------------
+
+SERVER
+
+
+app.use(express.json())
+
+    Por padrão, o Express não sabe interpretar JSON sozinho.
+    uzir o corpo (body) em objeto JS.
+
+    É um middleware do Express que faz o servidor entender JSON enviado (frontend, Postman, mobile, etc) no corpo da requisição (req.body).
+
+    Sem isso, o req.body vem undefined.
+
+    Quando é usado?
+        - POST
+        - PUT
+        - PATCH
+        E enviar dados no body.
+
+
+
+
+app.all("*")
+
+    - * captura qualquer rota que não existe (versão express baixo de 5)
+
+    - all captura qualquer método: GET, POST, PUT, DELETE, etc.
+
+mesma solução para express atual:
+    app.use((req, res, next) => {
+    const error = new Error("Rota não encontrada");
+    error.status = 404;
+    next(error);
+    });
+
+
+--------------------------------------------------
+Router()
+
+Router() é uma função do Express que cria um mini-app, ou seja:
+um objeto capaz de:
+
+    ✔ criar rotas
+    ✔ aplicar middlewares
+    ✔ ser montado no app principal
+
+Ele funciona como um subservidor para organizar endpoints.
+
+
+
+ROTA COM PARÂMETROS
+
+app.get("/filme/:id", async (req, res) => {
+  ...
+})
+A vírgula está separando dois argumentos da função app.get() OBRIGATÓRIOS: app.get(path, callback)
+
+   1- Primeiro argumento(STRING):
+    O caminho (rota) → "/filme/:id" // minha rota, como a pessoa vai acessar meu site e receber a respota
+
+   2- Segundo argumento(FUNÇÃO):
+    A função que será executada quando essa rota for chamada
+    → async (req, res) => { ... }
+
+    - req → informações da requisição
+
+    - res → objeto usado para responder
+
+
+
+
+const id = req.params.id X const { id } = req.params
+
+- O Express entende que o trecho :id é uma variável na URL.
+- o valor do :id vai para req.params
+- const { id } é destructuring:Guarda o valor e depois ele extrai só a chave id do objeto params.
+
+
+
+
+req.params, req.body e req.query
+
+    📌 params → parte fixa da URL → /movie/:id
+        → Geralmente quando queremos acessar um recurso específico. Quando o valor faz parte do caminho da rota.
+
+    📌 query → filtros na URL após "?" → ?search=batman
+        → São parâmetros opcionais → usados para pesquisa, filtros, paginação…
+
+    📌 body → dados enviados no POST/PUT
+        - Usado para pegar dados enviados no corpo da requisição. Ex: cadastro de usuário, login…
+
+EXEMPLOS:
+    app.post("/login", (req, res) => {
+        console.log(req.body);
+    });
+
+    Exemplo de JSON enviado do front:
+    { 
+    "email": "teste@email.com",
+    "senha": "1234"
+    }
+
+    O que chega no backend?
+    req.body = {
+    email: "teste@email.com",
+    senha: "1234"
+    }

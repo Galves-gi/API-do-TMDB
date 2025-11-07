@@ -1,10 +1,10 @@
 {
-  "name": "api-api-do-tmdb",
+  "name": "api-do-tmdb",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
+    "start": "nodemon ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

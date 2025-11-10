@@ -1,22 +1,23 @@
 import express from "express";
-import axios from "axios";
-import dotenv from "dotenv";
-import { router } from "./routes/movies.routes.js";
+/* import { xss } from "xss";
+import { mongoSanitize } from "express-mongo-sanitize"; */
+import { limitarUso } from "./middlewares/rateLimit.js";
+import { router } from "./routes/movies_routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-
-dotenv.config()
+import { corsTodosDominios } from "../src/config/cors.js";
 
 const app = express()
-const PORT = 5000
+
+app.use(corsTodosDominios)
 
 app.use(express.json())
+app.use(express.static("./public"))
 
-export const HEADER_TMDB = axios.create({
-  baseURL:"https://api.themoviedb.org/3",
-  headers:{
-    Authorization:`Bearer ${process.env.TMDB_TOKEN}`
-  }
-})
+const PORT = 8080
+
+/* app.use(xss())
+app.use(mongoSanitize()) */
+app.use(limitarUso)
 
 app.use(router)
 

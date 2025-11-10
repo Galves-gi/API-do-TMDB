@@ -25,6 +25,87 @@ DOTENV
 
 
 --------------------------------------------------
+
+express-rate-limit
+
+É um middleware que limita o número de requisições que um cliente pode fazer à sua API em um determinado tempo.
+
+    ➡️ Evita abuso / ataques (DoS, brute force)
+    ➡️ Protege seu servidor
+    ➡️ Diminui custo (menos chamadas ao TMDB, por exemplo)
+
+    import rateLimit from "express-rate-limit";
+
+    const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    });
+
+    app.use(limiter);
+* Cada cliente pode fazer no máximo 100 requisições a cada 15 minutos.
+
+Explicação detalhada
+
+    import rateLimit ---->	                Importa o pacote
+    const limiter = rateLimit({...}) ---->	Cria configuração
+    windowMs: 15 * 60 * 1000 ---->	        Tempo da janela → 15 minutos
+    max: 100 ---->	                        Máximo permitido → 100 requisições
+    app.use(limiter) ---->	                Aplica o limitador em todas as rotas
+
+--------------------------------------------------
+
+PROTEGER BACKEND CONTRA INJEÇÕES
+
+xss-clean
+
+XSS (Cross-Site Scripting)
+É quando alguém envia código malicioso (como <script>alert("hack")</script>) para ser executado no navegador de outros usuários.
+
+O que xss-clean faz?
+
+    ✔ Remove tags e scripts maliciosos
+    ✔ Limpa dados de entrada
+    ✔ Evita execução de código inserido pelo usuário
+
+Como funciona na prática
+    🔹 Ele roda antes das rotas
+    🔹 Inspeciona req.body, req.query, req.params
+    🔹 Remove conteúdo malicioso
+
+express-mongo-sanitize → é mais útil em apps que usam Mongo/Mongoose. Porém, é útil para sanitizar inputs de pesquisa.
+
+    Se o backend não sanitiza isso ($gt, $set, $or, .), pode:
+    ✅ Logar sem senha
+    ✅ Alterar dados
+    ✅ Expor informações
+
+O que mongoSanitize() faz?
+
+    ✔ Remove operadores iniciados com $ e .
+    ✔ Impede injeção nas queries
+
+--------------------------------------------------
+
+As reticências ... 
+
+{
+  ...dadosInformacoesFilme,
+  poster_url: posterURL
+}
+
+
+se chamam "spread operator" (operador de espalhamento).
+
+É um recurso do JavaScript que permite espalhar (copiar) todas as propriedades de um objeto, array ou iterável, dentro de outro objeto/array.
+
+    - Pega todos os dados retornados da API do TMDB
+
+    - Espalha dentro desse novo objeto
+
+    - Adiciona a chave extra poster_url
+
+--------------------------------------------------
+
 MIDDLEWARE
 
 Middleware é uma função que fica entre a requisição e a resposta.

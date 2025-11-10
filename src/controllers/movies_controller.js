@@ -1,16 +1,18 @@
+import { formatarRetornoFilme } from "../utils/formatar_retorno_filmes.js";
 import { 
     getLancamentoCartaz,
     getMaisVotados,
     getFuturoLancamento,
     getInformacoesFilme,
     getPesquisarFilme,
-    getDetalhesColecao} from "../services/tmdb.services.js";
+    getDetalhesColecao} from "../services/tmdb_services.js";
 
 //lançamentos em cartaz
 export async function lancamentoCartazControllers(req, res, next) {
     try {
         const dadosLancamentos = await getLancamentoCartaz()
-        res.json(dadosLancamentos)
+        
+        res.json({resultado: formatarRetornoFilme(dadosLancamentos)})
     } catch (error) {
         next(error)
     }
@@ -20,7 +22,7 @@ export async function lancamentoCartazControllers(req, res, next) {
 export async function maisVotadosControllers(req, res, next) {
     try {
         const dadosMaisVotados = await getMaisVotados()
-        res.json(dadosMaisVotados)
+        res.json({resultado: formatarRetornoFilme(dadosMaisVotados)})
     } catch (error) {
         next(error)
     }
@@ -30,7 +32,7 @@ export async function maisVotadosControllers(req, res, next) {
 export async function futuroLancamentoControllers(req, res, next) {
     try {
         const dadosFuturoLancamentos = await getFuturoLancamento()
-        res.json(dadosFuturoLancamentos)
+        res.json({resultado: formatarRetornoFilme(dadosFuturoLancamentos)})
     } catch (error) {
         next(error)
     }
@@ -41,7 +43,13 @@ export async function informacoesFilmeControllers(req, res, next) {
     try {
         const { id } = req.params
         const dadosInformacoesFilme = await getInformacoesFilme(id)
-        res.json(dadosInformacoesFilme)
+
+        return res.json({
+            resultado: formatarRetornoFilme(dadosInformacoesFilme),
+            creditos: dadosInformacoesFilme.credits,
+            video: dadosInformacoesFilme.videos
+        })
+
     } catch (error) {
         next(error)
     }
@@ -50,9 +58,15 @@ export async function informacoesFilmeControllers(req, res, next) {
 // pesquisar
 export async function pesquisarFilmeControllers(req, res, next) {
     try {
-        const { buscar } = req.params
-        const dadosPesquisarFilme = await getPesquisarFilme(buscar)
-        res.json(dadosPesquisarFilme)
+        const buscar = req.query.buscar || ""
+
+        if (!buscar) {
+            return res.status(400).json({mensagem: `query "buscar" obrigatorio`})
+        }
+
+        const retornoBuscar = await getPesquisarFilme(buscar)
+
+        res.json({resultado: retornoBuscar})
 
     } catch (error) {
         next(error)
@@ -64,6 +78,8 @@ export async function detalhesColecaoControllers(req, res, next) {
     const { pesquisaColecao } = req.params
     try {
         const dadosDetalhesColecao = await getDetalhesColecao(pesquisaColecao)
+
+        
         res.json(dadosDetalhesColecao)
     } catch (error) {
         next(error)

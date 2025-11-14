@@ -1,27 +1,167 @@
 AXIOS
 - o que é?
-
+  Axios é uma biblioteca JavaScript (cliente HTTP) que permite fazer requisições HTTP (GET, POST, PUT, DELETE, etc) para APIs externas.
+  É uma alternativa ao Fetch API com mais recursos e funcionalidades.
 
 - oq consegue fazer?
+  ✔ Fazer requisições GET, POST, PUT, DELETE, PATCH
+  ✔ Enviar dados (JSON, form-data, etc)
+  ✔ Adicionar headers customizados
+  ✔ Interceptar requisições e respostas
+  ✔ Timeout de requisições
+  ✔ Cancelar requisições
+  ✔ Transformar dados automaticamente
+  ✔ Tratamento de erros melhorado
 
 - onde usar?
-
+  ✔ Chamar APIs externas (como TMDB neste projeto)
+  ✔ Fazer requisições de dados entre frontend e backend
+  ✔ Autenticação com tokens
+  ✔ Upload de arquivos
+  ✔ Qualquer lugar que precise de HTTP requests
 
 - como usar?
+  
+  // Instalação
+  npm install axios
+  
+  // Importar
+  import axios from "axios";
+  
+  // GET - buscar dados
+  const response = await axios.get("https://api.exemplo.com/filmes");
+  console.log(response.data);
+  
+  // POST - enviar dados
+  const response = await axios.post("https://api.exemplo.com/usuarios", {
+    nome: "João",
+    email: "joao@email.com"
+  });
+  
+  // Com headers (como autenticação)
+  const response = await axios.get("https://api.exemplo.com/filmes", {
+    headers: {
+      Authorization: "Bearer SEU_TOKEN_AQUI"
+    }
+  });
+  
+  // Tratamento de erros
+  try {
+    const response = await axios.get("https://api.exemplo.com/filmes");
+  } catch (error) {
+    console.log("Erro:", error.response?.data);
+  }
 
+--------------------------------------------------
 
 EXPRESS
 - o que é?
-
+  Express é um framework minimalista e flexível para Node.js que facilita a criação de servidores web e APIs REST.
+  É a base para criar endpoints, rotas, middlewares e manipular requisições HTTP.
 
 - O que faz?
-
+  ✔ Criar um servidor HTTP
+  ✔ Definir rotas (GET, POST, PUT, DELETE, etc)
+  ✔ Aplicar middlewares
+  ✔ Receber e processar requisições (req.body, req.params, req.query)
+  ✔ Enviar respostas (res.json(), res.send(), etc)
+  ✔ Tratamento de erros centralizado
+  ✔ Servir arquivos estáticos (HTML, CSS, JS)
 
 - Como usar?
+  
+  // Instalação
+  npm install express
+  
+  // Importar e criar servidor
+  import express from "express";
+  const app = express();
+  const PORT = 8080;
+  
+  // Middleware para entender JSON
+  app.use(express.json());
+  
+  // Rota GET simples
+  app.get("/", (req, res) => {
+    res.json({ mensagem: "Olá!" });
+  });
+  
+  // Rota GET com parâmetro
+  app.get("/filme/:id", (req, res) => {
+    const { id } = req.params;
+    res.json({ filmeId: id });
+  });
+  
+  // Rota POST - receber dados
+  app.post("/usuarios", (req, res) => {
+    const { nome, email } = req.body;
+    res.json({ mensagem: "Usuário criado", nome, email });
+  });
+  
+  // Rota com query params (filtros)
+  app.get("/pesquisa", (req, res) => {
+    const { query } = req.query;
+    res.json({ buscando: query });
+  });
+  
+  // Iniciar servidor
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+  });
 
+--------------------------------------------------
 
 DOTENV
 - O QUE É?
+  Dotenv é um pacote que carrega variáveis de ambiente de um arquivo .env para process.env
+  Permite armazenar informações sensíveis (API keys, senhas, tokens) sem expor no código.
+
+- PARA QUE SERVE?
+  ✔ Proteger dados sensíveis (não colocar no GitHub)
+  ✔ Usar diferentes configurações por ambiente (dev, produção)
+  ✔ Manter secrets seguros
+  ✔ Facilitar deploy em diferentes servidores
+
+- COMO USAR?
+
+  // Instalação
+  npm install dotenv
+  
+  // 1. Criar arquivo .env na raiz do projeto
+  TMDB_API_KEY=sua_chave_secreta_aqui
+  PORT=8080
+  DATABASE_URL=mongodb://localhost:27017
+  
+  // 2. Importar e configurar no início do arquivo
+  import dotenv from "dotenv";
+  dotenv.config();
+  
+  // 3. Acessar as variáveis
+  const apiKey = process.env.TMDB_API_KEY;
+  const port = process.env.PORT || 3000;
+  
+  // 4. Não esquecer de adicionar .env no .gitignore
+  // Arquivo .gitignore
+  .env
+  node_modules/
+  
+  // EXEMPLO COMPLETO
+  import axios from "axios";
+  import dotenv from "dotenv";
+  dotenv.config();
+  
+  const apiKey = process.env.TMDB_API_KEY;
+  
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/movie/550`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`
+      }
+    }
+  );
+  
+  console.log(response.data);
 
 
 --------------------------------------------------
@@ -184,11 +324,6 @@ Bearer :
     Então Bearer Token significa:
 
     Quem estiver portando este token tem permissão para acessar o recurso.
-
-
---------------------------------------------------
-
-PADRÃO NBC - MODULE
 
 
 --------------------------------------------------
